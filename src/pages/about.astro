@@ -346,29 +346,14 @@ const avatarSrc = (moments?.items ?? []).find((it) => it.avatar)?.avatar ?? 'htt
   overflow-y: hidden;
   padding: 20px 40px;
   scroll-behavior: smooth;
-  scrollbar-width: thin;
-  scrollbar-color: var(--primary) transparent;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
   overscroll-behavior-x: none;
   -webkit-overflow-scrolling: touch;
 }
 
 .photo-collage::-webkit-scrollbar {
-  height: 8px;
-}
-
-.photo-collage::-webkit-scrollbar-track {
-  background: transparent;
-}
-
-.photo-collage::-webkit-scrollbar-thumb {
-  background: var(--primary);
-  border-radius: 4px;
-  opacity: 0.5;
-}
-
-.photo-collage::-webkit-scrollbar-thumb:hover {
-  background: var(--primary);
-  opacity: 1;
+  display: none;
 }
 
 .photo-item {
@@ -431,29 +416,14 @@ const avatarSrc = (moments?.items ?? []).find((it) => it.avatar)?.avatar ?? 'htt
   overflow-y: hidden;
   padding: 20px 40px;
   scroll-behavior: smooth;
-  scrollbar-width: thin;
-  scrollbar-color: var(--primary) transparent;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
   overscroll-behavior-x: none;
   -webkit-overflow-scrolling: touch;
 }
 
 .loves-grid::-webkit-scrollbar {
-  height: 8px;
-}
-
-.loves-grid::-webkit-scrollbar-track {
-  background: transparent;
-}
-
-.loves-grid::-webkit-scrollbar-thumb {
-  background: var(--primary);
-  border-radius: 4px;
-  opacity: 0.5;
-}
-
-.loves-grid::-webkit-scrollbar-thumb:hover {
-  background: var(--primary);
-  opacity: 1;
+  display: none;
 }
 
 .love-item {
@@ -614,6 +584,7 @@ const avatarSrc = (moments?.items ?? []).find((it) => it.avatar)?.avatar ?? 'htt
     -webkit-overflow-scrolling: touch;
   }
 
+
   .hero-section {
     min-height: 80vh;
     padding: 60px 24px;
@@ -725,6 +696,7 @@ const avatarSrc = (moments?.items ?? []).find((it) => it.avatar)?.avatar ?? 'htt
     overscroll-behavior-y: none;
     -webkit-overflow-scrolling: touch;
   }
+
 
   .hero-section {
     min-height: 70vh;
