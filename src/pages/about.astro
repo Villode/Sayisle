@@ -157,6 +157,8 @@ const avatarSrc = (moments?.items ?? []).find((it) => it.avatar)?.avatar ?? 'htt
   padding: 0 !important;
   margin: 0 !important;
   background: transparent;
+  overscroll-behavior: none;
+  overscroll-behavior-y: none;
 }
 
 /* ========== 英雄区 - 沉浸式开篇 ========== */
@@ -346,6 +348,8 @@ const avatarSrc = (moments?.items ?? []).find((it) => it.avatar)?.avatar ?? 'htt
   scroll-behavior: smooth;
   scrollbar-width: thin;
   scrollbar-color: var(--primary) transparent;
+  overscroll-behavior-x: none;
+  -webkit-overflow-scrolling: touch;
 }
 
 .photo-collage::-webkit-scrollbar {
@@ -429,6 +433,8 @@ const avatarSrc = (moments?.items ?? []).find((it) => it.avatar)?.avatar ?? 'htt
   scroll-behavior: smooth;
   scrollbar-width: thin;
   scrollbar-color: var(--primary) transparent;
+  overscroll-behavior-x: none;
+  -webkit-overflow-scrolling: touch;
 }
 
 .loves-grid::-webkit-scrollbar {
@@ -601,6 +607,13 @@ const avatarSrc = (moments?.items ?? []).find((it) => it.avatar)?.avatar ?? 'htt
 
 /* ========== 响应式设计 ========== */
 @media (max-width: 768px) {
+  /* 移动端禁用滚动回弹 */
+  body, html, .about-page {
+    overscroll-behavior: none;
+    overscroll-behavior-y: none;
+    -webkit-overflow-scrolling: touch;
+  }
+
   .hero-section {
     min-height: 80vh;
     padding: 60px 24px;
@@ -706,6 +719,13 @@ const avatarSrc = (moments?.items ?? []).find((it) => it.avatar)?.avatar ?? 'htt
 }
 
 @media (max-width: 480px) {
+  /* 手机端禁用滚动回弹 */
+  body, html, .about-page {
+    overscroll-behavior: none;
+    overscroll-behavior-y: none;
+    -webkit-overflow-scrolling: touch;
+  }
+
   .hero-section {
     min-height: 70vh;
     padding: 40px 20px;
