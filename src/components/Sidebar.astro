@@ -1,0 +1,229 @@
+---
+import { getCollection, getEntry } from 'astro:content';
+import Search from './Search.astro';
+
+const allPosts = await getCollection('blog', ({ data }) => !data.draft);
+const allTags = [...new Set(allPosts.flatMap(post => post.data.tags || []))];
+const allCategories = [...new Set(allPosts.flatMap(post => post.data.categories || []))];
+
+// 获取最新动态（moments）
+const momentsData = await getEntry('moments', 'data');
+const recentMoments = momentsData?.data?.items?.slice(0, 5) || [];
+
+// 计算相对时间的函数
+function getRelativeTime(dateStr: string): string {
+  if (!dateStr) return '未知时间';
+  
+  const now = new Date();
+  const date = new Date(dateStr);
+  
+  // 检查日期是否有效
+  if (isNaN(date.getTime())) {
+    return '未知时间';
+  }
+  
+  const diffMs = now.getTime() - date.getTime();
+  const diffSecs = Math.floor(diffMs / 1000);
+  const diffMins = Math.floor(diffSecs / 60);
+  const diffHours = Math.floor(diffMins / 60);
+  const diffDays = Math.floor(diffHours / 24);
+  const diffWeeks = Math.floor(diffDays / 7);
+
+  if (diffSecs < 60) return '刚刚';
+  if (diffMins < 60) return `${diffMins}分钟前`;
+  if (diffHours < 24) return `${diffHours}小时前`;
+  if (diffDays === 1) return '昨天';
+  if (diffDays < 7) return `${diffDays}天前`;
+  if (diffWeeks < 4) return `${diffWeeks}周前`;
+  
+  // 超过4周显示具体日期
+  return date.toLocaleDateString('zh-CN', { year: 'numeric', month: 'long', day: 'numeric' });
+}
+---
+
+<!-- 搜索框 -->
+<div class="sidebar-search">
+  <Search />
+</div>
+
+<!-- 最新动态 -->
+<div class="sidebar-widget recent-widget">
+  <h3 class="widget-title-simple">
+    <span class="title-dot"></span>
+    最新动态
+  </h3>
+  <div class="recent-list">
+    {recentMoments.map((moment: any) => (
+      <a href="/moments" class="recent-item">
+        <div class="recent-content">
+          <div class="recent-title">{moment.text}</div>
+          <div class="recent-date">{getRelativeTime(moment.date)}</div>
+        </div>
+        <svg class="recent-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+          <path d="M5 12h14M12 5l7 7-7 7"/>
+        </svg>
+      </a>
+    ))}
+  </div>
+</div>
+
+<!-- 本站统计 -->
+<div class="sidebar-widget stats-widget">
+  <h3 class="widget-title-simple">
+    <span class="title-dot"></span>
+    本站统计
+  </h3>
+  <div class="sidebar-stats">
+    <div class="sidebar-stat">
+      <div class="sidebar-stat-num">{allPosts.length}</div>
+      <div class="sidebar-stat-text">文章</div>
+    </div>
+    <div class="sidebar-stat">
+      <div class="sidebar-stat-num">{allCategories.length}</div>
+      <div class="sidebar-stat-text">分类</div>
+    </div>
+    <div class="sidebar-stat">
+      <div class="sidebar-stat-num">{allTags.length}</div>
+      <div class="sidebar-stat-text">标签</div>
+    </div>
+  </div>
+</div>
+
+<style>
+/* 搜索框容器 */
+.sidebar-search {
+  margin-bottom: 20px;
+}
+
+/* 侧边栏组件基础样式 */
+.sidebar-widget {
+  padding: 20px;
+  margin-bottom: 16px;
+  transition: all .3s ease;
+}
+
+/* 简化标题样式 */
+.widget-title-simple {
+  margin: 0 0 16px !important;
+  font-size: 15px !important;
+  font-weight: 700 !important;
+  color: var(--text-1) !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+}
+
+.title-dot {
+  width: 4px !important;
+  height: 16px !important;
+  background: var(--primary) !important;
+  border-radius: 2px !important;
+  display: block !important;
+}
+
+/* 最新动态列表 */
+.recent-list {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 0 !important;
+}
+
+.recent-item {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  gap: 12px !important;
+  padding: 14px 0 !important;
+  border-bottom: 1px solid var(--border) !important;
+  text-decoration: none !important;
+  transition: all .2s ease !important;
+  color: var(--text-1) !important;
+}
+
+.recent-item:last-child {
+  border-bottom: none !important;
+}
+
+.recent-item:hover {
+  color: var(--primary) !important;
+}
+
+.recent-item:hover .recent-arrow {
+  transform: translateX(4px);
+  opacity: 1;
+}
+
+.recent-content {
+  flex: 1 !important;
+  min-width: 0 !important;
+}
+
+.recent-title {
+  font-size: 14px !important;
+  font-weight: 500 !important;
+  line-height: 1.5 !important;
+  margin-bottom: 4px !important;
+  display: -webkit-box !important;
+  -webkit-box-orient: vertical !important;
+  -webkit-line-clamp: 2 !important;
+  overflow: hidden !important;
+  color: inherit !important;
+}
+
+.recent-date {
+  font-size: 12px !important;
+  color: var(--text-2) !important;
+  opacity: .7 !important;
+}
+
+.recent-arrow {
+  width: 16px !important;
+  height: 16px !important;
+  stroke-width: 2 !important;
+  flex-shrink: 0 !important;
+  opacity: .4 !important;
+  transition: all .2s ease !important;
+  color: var(--primary) !important;
+}
+
+/* 本站统计 */
+.sidebar-stats {
+  display: grid !important;
+  grid-template-columns: repeat(3, 1fr) !important;
+  gap: 10px !important;
+}
+
+.sidebar-stat {
+  text-align: center !important;
+  padding: 16px 10px !important;
+  transition: all .2s ease !important;
+}
+
+.sidebar-stat:hover {
+  transform: translateY(-2px) !important;
+}
+
+.sidebar-stat:hover .sidebar-stat-num {
+  color: #fff !important;
+}
+
+.sidebar-stat:hover .sidebar-stat-text {
+  color: rgba(255,255,255,.9) !important;
+}
+
+.sidebar-stat-num {
+  font-size: 24px !important;
+  font-weight: 700 !important;
+  color: var(--primary) !important;
+  line-height: 1 !important;
+  margin-bottom: 6px !important;
+  transition: color .2s ease !important;
+}
+
+.sidebar-stat-text {
+  font-size: 12px !important;
+  color: var(--text-2) !important;
+  opacity: .8 !important;
+  transition: color .2s ease !important;
+}
+</style>

@@ -1,0 +1,459 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { getEntry } from 'astro:content';
+
+const moments = await getEntry('moments', 'data');
+
+// 计算相对时间的函数
+function getRelativeTime(dateStr: string): string {
+  if (!dateStr) return '未知时间';
+  
+  const now = new Date();
+  const date = new Date(dateStr);
+  
+  // 检查日期是否有效
+  if (isNaN(date.getTime())) {
+    return '未知时间';
+  }
+  
+  const diffMs = now.getTime() - date.getTime();
+  const diffSecs = Math.floor(diffMs / 1000);
+  const diffMins = Math.floor(diffSecs / 60);
+  const diffHours = Math.floor(diffMins / 60);
+  const diffDays = Math.floor(diffHours / 24);
+  const diffWeeks = Math.floor(diffDays / 7);
+
+  if (diffSecs < 60) return '刚刚';
+  if (diffMins < 60) return `${diffMins}分钟前`;
+  if (diffHours < 24) return `${diffHours}小时前`;
+  if (diffDays === 1) return '昨天';
+  if (diffDays < 7) return `${diffDays}天前`;
+  if (diffWeeks < 4) return `${diffWeeks}周前`;
+  
+  // 超过4周显示具体日期
+  return date.toLocaleDateString('zh-CN', { year: 'numeric', month: 'long', day: 'numeric' });
+}
+---
+
+<BaseLayout title="动态">
+  <!-- 右侧边栏 -->
+  <div slot="sidebar" class="moments-sidebar-content">
+    <!-- 功能区 -->
+    <div class="sidebar-card features-card">
+      <div class="card-title">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <rect x="3" y="3" width="7" height="7"/>
+          <rect x="14" y="3" width="7" height="7"/>
+          <rect x="14" y="14" width="7" height="7"/>
+          <rect x="3" y="14" width="7" height="7"/>
+        </svg>
+        <span>功能区</span>
+      </div>
+      <div class="features-grid">
+        <a href="/gallery" class="feature-item">
+          <div class="feature-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+              <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
+              <circle cx="8.5" cy="8.5" r="1.5"/>
+              <polyline points="21 15 16 10 5 21"/>
+            </svg>
+          </div>
+          <span class="feature-name">相册</span>
+        </a>
+        <a href="/music" class="feature-item">
+          <div class="feature-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+              <path d="M9 18V5l12-2v13"/>
+              <circle cx="6" cy="18" r="3"/>
+              <circle cx="18" cy="16" r="3"/>
+            </svg>
+          </div>
+          <span class="feature-name">音乐</span>
+        </a>
+        <a href="/games" class="feature-item">
+          <div class="feature-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+              <line x1="6" y1="11" x2="10" y2="11"/>
+              <line x1="8" y1="9" x2="8" y2="13"/>
+              <line x1="15" y1="12" x2="15.01" y2="12"/>
+              <line x1="18" y1="10" x2="18.01" y2="10"/>
+              <path d="M17.32 5H6.68a4 4 0 0 0-3.978 3.59c-.006.052-.01.101-.017.152C2.604 9.416 2 14.456 2 16a3 3 0 0 0 3 3c1 0 1.5-.5 2-1l1.414-1.414A2 2 0 0 1 9.828 16h4.344a2 2 0 0 1 1.414.586L17 18c.5.5 1 1 2 1a3 3 0 0 0 3-3c0-1.545-.604-6.584-.685-7.258-.007-.05-.011-.1-.017-.151A4 4 0 0 0 17.32 5z"/>
+            </svg>
+          </div>
+          <span class="feature-name">游戏</span>
+        </a>
+        <a href="/about" class="feature-item">
+          <div class="feature-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+              <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+              <circle cx="12" cy="7" r="4"/>
+            </svg>
+          </div>
+          <span class="feature-name">关于</span>
+        </a>
+      </div>
+    </div>
+
+    <!-- 友情链接 -->
+    <div class="sidebar-card friends-card">
+      <div class="card-title">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/>
+          <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/>
+        </svg>
+        <span>友情链接</span>
+      </div>
+      <div class="friends-list">
+        <a href="https://example1.com" class="friend-item" target="_blank">
+          <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=1" alt="技术博客" class="friend-avatar">
+          <div class="friend-name">技术博客</div>
+        </a>
+        <a href="https://example2.com" class="friend-item" target="_blank">
+          <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=2" alt="摄影之眼" class="friend-avatar">
+          <div class="friend-name">摄影之眼</div>
+        </a>
+        <a href="https://example3.com" class="friend-item" target="_blank">
+          <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=3" alt="设计师" class="friend-avatar">
+          <div class="friend-name">设计师</div>
+        </a>
+        <a href="https://example4.com" class="friend-item" target="_blank">
+          <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=4" alt="生活随笔" class="friend-avatar">
+          <div class="friend-name">生活随笔</div>
+        </a>
+        <a href="https://example5.com" class="friend-item" target="_blank">
+          <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=5" alt="开发笔记" class="friend-avatar">
+          <div class="friend-name">开发笔记</div>
+        </a>
+        <a href="https://example6.com" class="friend-item" target="_blank">
+          <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=6" alt="旅行日记" class="friend-avatar">
+          <div class="friend-name">旅行日记</div>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <div class="scroll-area">
+    <!-- 顶部信息卡片 -->
+    <div class="moments-profile-card">
+      <div class="profile-cover">
+        <img class="profile-cover-img" src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&h=300&fit=crop" alt="封面">
+      </div>
+      <div class="profile-content">
+        <div class="profile-info">
+          <h1 class="profile-name">Cheng Du</h1>
+          <p class="profile-bio">分享生活 · 记录瞬间</p>
+        </div>
+        <img class="profile-avatar" src="https://v2.xxapi.cn/api/head?return=302" alt="头像">
+        <div class="profile-stats">
+          <div class="stat-item">
+            <div class="stat-value">{moments?.data?.items?.length || 0}</div>
+            <div class="stat-label">动态</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-value">1.2K</div>
+            <div class="stat-label">访问</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 时间线列表 -->
+    <div class="moments-timeline">
+      {moments?.data?.items?.map((item: any, index: number) => (
+        <div class="timeline-card" data-index={index}>
+          <div class="card-header">
+            <img 
+              class="card-avatar" 
+              src={item.avatar || 'https://v2.xxapi.cn/api/head?return=302'} 
+              alt="头像"
+            >
+            <div class="card-author-info">
+              <div class="card-author">{item.author}</div>
+              <div class="card-time">{getRelativeTime(item.date)}</div>
+            </div>
+          </div>
+          
+          <div class="card-body">
+            <div class="card-text">{item.text}</div>
+            {item.images && item.images.length > 0 && (
+              <div class={`card-images grid-${Math.min(item.images.length, 3)}`}>
+                {item.images.map((img: string) => (
+                  <div class="image-wrapper">
+                    <img src={img} alt="动态图片" loading="lazy" class="card-image">
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+          
+          <div class="card-footer">
+            <button class="action-btn">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+              </svg>
+              <span>喜欢</span>
+            </button>
+            <button class="action-btn">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+              </svg>
+              <span>评论</span>
+            </button>
+            <button class="action-btn">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/>
+                <path d="M13.73 21a2 2 0 0 1-3.46 0"/>
+              </svg>
+              <span>分享</span>
+            </button>
+          </div>
+        </div>
+      ))}
+    </div>
+  </div>
+
+  <!-- 图片查看器 -->
+  <div class="lightbox" id="lightbox">
+    <button class="lightbox-close" id="lightbox-close">&times;</button>
+    <button class="lightbox-prev" id="lightbox-prev">&lt;</button>
+    <div class="lightbox-img-wrapper" id="lightbox-img-wrapper">
+      <img class="lightbox-img" id="lightbox-img" src="" alt="预览图片">
+    </div>
+    <button class="lightbox-next" id="lightbox-next">&gt;</button>
+    <div class="lightbox-zoom-control">
+      <button class="zoom-btn" id="zoom-out">-</button>
+      <input type="range" class="zoom-slider" id="zoom-slider" min="100" max="300" value="100" step="10">
+      <button class="zoom-btn" id="zoom-in">+</button>
+      <button class="zoom-reset" id="zoom-reset">重置</button>
+    </div>
+  </div>
+
+  <script is:inline>
+    (function() {
+      const lightbox = document.getElementById('lightbox');
+      const lightboxImg = document.getElementById('lightbox-img');
+      const lightboxImgWrapper = document.getElementById('lightbox-img-wrapper');
+      const closeBtn = document.getElementById('lightbox-close');
+      const prevBtn = document.getElementById('lightbox-prev');
+      const nextBtn = document.getElementById('lightbox-next');
+      const zoomSlider = document.getElementById('zoom-slider');
+      const zoomInBtn = document.getElementById('zoom-in');
+      const zoomOutBtn = document.getElementById('zoom-out');
+      const zoomResetBtn = document.getElementById('zoom-reset');
+      
+      let currentImages = [];
+      let currentIndex = 0;
+      let currentZoom = 100;
+      let isDragging = false;
+      let startX, startY, translateX = 0, translateY = 0;
+
+      // 收集所有可点击的图片
+      function initLightbox() {
+        const clickableImages = document.querySelectorAll('.card-image');
+        
+        clickableImages.forEach((img, index) => {
+          img.addEventListener('click', function() {
+            // 收集当前card-images内的所有图片
+            const parentImages = this.closest('.card-images');
+            if (parentImages) {
+              currentImages = Array.from(parentImages.querySelectorAll('.card-image')).map(i => i.src);
+              currentIndex = Array.from(parentImages.querySelectorAll('.card-image')).indexOf(this);
+            } else {
+              currentImages = [this.src];
+              currentIndex = 0;
+            }
+            
+            showLightbox(currentIndex);
+          });
+        });
+      }
+
+      function showLightbox(index) {
+        if (index < 0) index = currentImages.length - 1;
+        if (index >= currentImages.length) index = 0;
+        
+        currentIndex = index;
+        lightboxImg.src = currentImages[currentIndex];
+        lightbox.classList.add('active');
+        document.body.style.overflow = 'hidden';
+        
+        // 重置缩放
+        resetZoom();
+        
+        // 隐藏侧边栏和侧边导航
+        const sidebar = document.querySelector('.sidebar');
+        const sidenav = document.querySelector('.sidenav');
+        const momentsSidebar = document.querySelector('.moments-sidebar-content');
+        const slotSidebar = document.querySelector('[slot="sidebar"]');
+        const gridColumn3 = document.querySelector('.container > :nth-child(3)');
+        if (sidebar) sidebar.style.display = 'none';
+        if (sidenav) sidenav.style.display = 'none';
+        if (momentsSidebar) momentsSidebar.style.display = 'none';
+        if (slotSidebar) slotSidebar.style.display = 'none';
+        if (gridColumn3) gridColumn3.style.display = 'none';
+        
+        // 显示/隐藏前后按钮
+        if (currentImages.length <= 1) {
+          prevBtn.style.display = 'none';
+          nextBtn.style.display = 'none';
+        } else {
+          prevBtn.style.display = 'block';
+          nextBtn.style.display = 'block';
+        }
+      }
+
+      function closeLightbox() {
+        lightbox.classList.remove('active');
+        document.body.style.overflow = '';
+        
+        // 重置缩放
+        resetZoom();
+        
+        // 恢复侧边栏和侧边导航
+        const sidebar = document.querySelector('.sidebar');
+        const sidenav = document.querySelector('.sidenav');
+        const momentsSidebar = document.querySelector('.moments-sidebar-content');
+        const slotSidebar = document.querySelector('[slot="sidebar"]');
+        const gridColumn3 = document.querySelector('.container > :nth-child(3)');
+        if (sidebar) sidebar.style.display = '';
+        if (sidenav) sidenav.style.display = '';
+        if (momentsSidebar) momentsSidebar.style.display = '';
+        if (slotSidebar) slotSidebar.style.display = '';
+        if (gridColumn3) gridColumn3.style.display = '';
+      }
+
+      // 关闭按钮
+      closeBtn.addEventListener('click', closeLightbox);
+      
+      // 点击背景关闭
+      lightbox.addEventListener('click', function(e) {
+        if (e.target === lightbox) {
+          closeLightbox();
+        }
+      });
+
+      // 上一张
+      prevBtn.addEventListener('click', function(e) {
+        e.stopPropagation();
+        showLightbox(currentIndex - 1);
+      });
+
+      // 下一张
+      nextBtn.addEventListener('click', function(e) {
+        e.stopPropagation();
+        showLightbox(currentIndex + 1);
+      });
+
+      // 键盘控制
+      document.addEventListener('keydown', function(e) {
+        if (!lightbox.classList.contains('active')) return;
+        
+        if (e.key === 'Escape') {
+          closeLightbox();
+        } else if (e.key === 'ArrowLeft') {
+          showLightbox(currentIndex - 1);
+        } else if (e.key === 'ArrowRight') {
+          showLightbox(currentIndex + 1);
+        }
+      });
+
+      // 缩放功能
+      function updateZoom(zoom) {
+        currentZoom = Math.max(100, Math.min(300, zoom));
+        zoomSlider.value = currentZoom;
+        lightboxImg.style.transform = `scale(${currentZoom / 100}) translate(${translateX}px, ${translateY}px)`;
+        lightboxImg.style.cursor = currentZoom > 100 ? 'grab' : 'default';
+      }
+
+      function resetZoom() {
+        currentZoom = 100;
+        translateX = 0;
+        translateY = 0;
+        updateZoom(100);
+      }
+
+      zoomSlider.addEventListener('input', function(e) {
+        updateZoom(parseInt(e.target.value));
+      });
+
+      zoomInBtn.addEventListener('click', function(e) {
+        e.stopPropagation();
+        updateZoom(currentZoom + 20);
+      });
+
+      zoomOutBtn.addEventListener('click', function(e) {
+        e.stopPropagation();
+        updateZoom(currentZoom - 20);
+      });
+
+      zoomResetBtn.addEventListener('click', function(e) {
+        e.stopPropagation();
+        resetZoom();
+      });
+
+      // 拖动功能
+      lightboxImg.addEventListener('mousedown', function(e) {
+        if (currentZoom <= 100) return;
+        isDragging = true;
+        startX = e.clientX - translateX;
+        startY = e.clientY - translateY;
+        lightboxImg.style.cursor = 'grabbing';
+        e.preventDefault();
+      });
+
+      document.addEventListener('mousemove', function(e) {
+        if (!isDragging) return;
+        translateX = e.clientX - startX;
+        translateY = e.clientY - startY;
+        lightboxImg.style.transform = `scale(${currentZoom / 100}) translate(${translateX}px, ${translateY}px)`;
+      });
+
+      document.addEventListener('mouseup', function() {
+        if (isDragging) {
+          isDragging = false;
+          lightboxImg.style.cursor = currentZoom > 100 ? 'grab' : 'default';
+        }
+      });
+
+      // 触摸拖动支持
+      lightboxImg.addEventListener('touchstart', function(e) {
+        if (currentZoom <= 100) return;
+        const touch = e.touches[0];
+        startX = touch.clientX - translateX;
+        startY = touch.clientY - translateY;
+        e.preventDefault();
+      });
+
+      lightboxImg.addEventListener('touchmove', function(e) {
+        if (currentZoom <= 100) return;
+        const touch = e.touches[0];
+        translateX = touch.clientX - startX;
+        translateY = touch.clientY - startY;
+        lightboxImg.style.transform = `scale(${currentZoom / 100}) translate(${translateX}px, ${translateY}px)`;
+        e.preventDefault();
+      });
+
+      // 初始化
+      initLightbox();
+      
+      // 卡片入场动画
+      const observerOptions = {
+        threshold: 0.1,
+        rootMargin: '0px 0px -50px 0px'
+      };
+      
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('in-view');
+            observer.unobserve(entry.target);
+          }
+        });
+      }, observerOptions);
+      
+      document.querySelectorAll('.timeline-card').forEach(card => {
+        observer.observe(card);
+      });
+    })();
+  </script>
+</BaseLayout>

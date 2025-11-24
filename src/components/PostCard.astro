@@ -1,0 +1,50 @@
+---
+interface Props {
+  title: string;
+  date: Date;
+  summary?: string;
+  cover?: string;
+  tags?: string[];
+  slug: string;
+}
+
+const { title, date, summary, cover, tags, slug } = Astro.props;
+const formattedDate = date.toLocaleDateString('zh-CN', { year: 'numeric', month: '2-digit', day: '2-digit' });
+---
+
+<article class="post-card" data-tags={tags?.join(',')}>
+  <a class="post-card-link" href={`/posts/${slug}`}>
+    <div class="thumb">
+      {cover ? (
+        <img src={cover} alt={title} loading="lazy">
+      ) : (
+        <img src={`https://picsum.photos/seed/${slug}/400/300`} alt={title} loading="lazy">
+      )}
+      <div class="thumb-overlay">
+        <h2 class="title">{title}</h2>
+      </div>
+    </div>
+    <div class="post-info">
+      <h2 class="post-title">{title}</h2>
+      {summary && <p class="post-excerpt">{summary}</p>}
+      <div class="post-footer">
+        <span class="post-date">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
+            <line x1="16" y1="2" x2="16" y2="6"/>
+            <line x1="8" y1="2" x2="8" y2="6"/>
+            <line x1="3" y1="10" x2="21" y2="10"/>
+          </svg>
+          {formattedDate}
+        </span>
+        {tags && tags.length > 0 && (
+          <div class="post-tags">
+            {tags.slice(0, 2).map(tag => (
+              <span class="tag">#{tag}</span>
+            ))}
+          </div>
+        )}
+      </div>
+    </div>
+  </a>
+</article>

@@ -1,14 +1,20 @@
 {
   "name": "sayisle-astro",
   "type": "module",
-  "version": "0.0.1",
+  "version": "1.0.0",
+  "description": "言屿 - 语言的小岛，记录与分享的空间",
+  "author": "Cheng Du",
+  "license": "MIT",
   "scripts": {
     "dev": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
-    "astro": "astro"
+    "astro": "astro",
+    "check": "astro check"
   },
   "dependencies": {
+    "@astrojs/rss": "^4.0.14",
+    "@astrojs/sitemap": "^3.6.0",
     "astro": "^5.16.0"
   }
 }

@@ -1,0 +1,101 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getCollection } from 'astro:content';
+
+export async function getStaticPaths() {
+  const posts = await getCollection('blog');
+  return posts.map(post => ({
+    params: { slug: post.slug },
+    props: { post },
+  }));
+}
+
+const { post } = Astro.props;
+const { Content } = await post.render();
+const formattedDate = post.data.date.toLocaleDateString('zh-CN', { year: 'numeric', month: 'long', day: 'numeric' });
+---
+
+<BaseLayout 
+  title={post.data.title} 
+  description={post.data.summary}
+  image={post.data.cover}
+  article={true}
+>
+  <div class="scroll-area">
+    <article class="article-container">
+      <!-- 返回按钮 -->
+      <button onclick="history.back()" class="back-btn back-btn-header">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="m15 18-6-6 6-6"/>
+        </svg>
+        <span>返回</span>
+      </button>
+
+      {post.data.cover && (
+        <div class="article-cover">
+          <img src={post.data.cover} alt={post.data.title} class="cover-image">
+          <div class="cover-overlay">
+            <div class="cover-content">
+              {post.data.categories && post.data.categories.length > 0 && (
+                <div class="article-category">
+                  <span class="category-tag">{post.data.categories[0]}</span>
+                </div>
+              )}
+              <h1 class="article-title">{post.data.title}</h1>
+              <div class="article-meta">
+                <div class="meta-item">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
+                    <line x1="16" y1="2" x2="16" y2="6"/>
+                    <line x1="8" y1="2" x2="8" y2="6"/>
+                    <line x1="3" y1="10" x2="21" y2="10"/>
+                  </svg>
+                  <span>{formattedDate}</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {!post.data.cover && (
+        <header class="article-header">
+          {post.data.categories && post.data.categories.length > 0 && (
+            <div class="article-category">
+              <span class="category-tag">{post.data.categories[0]}</span>
+            </div>
+          )}
+          <h1 class="article-title">{post.data.title}</h1>
+          <div class="article-meta">
+            <div class="meta-item">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
+                <line x1="16" y1="2" x2="16" y2="6"/>
+                <line x1="8" y1="2" x2="8" y2="6"/>
+                <line x1="3" y1="10" x2="21" y2="10"/>
+              </svg>
+              <span>{formattedDate}</span>
+            </div>
+          </div>
+        </header>
+      )}
+
+      <div class="article-content">
+        <div class="article-body">
+          <Content />
+        </div>
+
+        {post.data.tags && post.data.tags.length > 0 && (
+          <div class="article-tags">
+            <div class="tags-title">标签</div>
+            <div class="tags-list">
+              {post.data.tags.map(tag => (
+                <a href={`/tags/${tag}`} class="tag-item">#{tag}</a>
+              ))}
+            </div>
+          </div>
+        )}
+      </div>
+    </article>
+  </div>
+</BaseLayout>

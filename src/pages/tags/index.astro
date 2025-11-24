@@ -1,0 +1,77 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getCollection } from 'astro:content';
+
+const allPosts = await getCollection('blog');
+const allTags = [...new Set(allPosts.flatMap(post => post.data.tags || []))];
+const tagCounts = allTags.map(tag => ({
+  tag,
+  count: allPosts.filter(post => post.data.tags?.includes(tag)).length
+})).sort((a, b) => b.count - a.count);
+---
+
+<BaseLayout title="所有标签">
+  <div class="scroll-area">
+    <div class="list-header">
+      <div class="list-header-left">
+        <h1 class="list-title">所有标签</h1>
+        <p class="list-desc">共 {allTags.length} 个标签</p>
+      </div>
+    </div>
+
+    <div class="tags-cloud">
+      {tagCounts.map(({ tag, count }) => (
+        <a href={`/tags/${tag}`} class="tag-cloud-item">
+          <span class="tag-name">#{tag}</span>
+          <span class="tag-count">{count}</span>
+        </a>
+      ))}
+    </div>
+  </div>
+</BaseLayout>
+
+<style>
+.tags-cloud {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  padding: 20px 0;
+}
+
+.tag-cloud-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 16px;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  color: var(--text-1);
+  text-decoration: none;
+  transition: all 0.2s ease;
+}
+
+.tag-cloud-item:hover {
+  background: var(--primary);
+  color: #fff;
+  border-color: var(--primary);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 47, 167, 0.2);
+}
+
+.tag-name {
+  font-size: 15px;
+  font-weight: 500;
+}
+
+.tag-count {
+  font-size: 12px;
+  padding: 2px 8px;
+  background: rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
+}
+
+.tag-cloud-item:hover .tag-count {
+  background: rgba(255, 255, 255, 0.2);
+}
+</style>

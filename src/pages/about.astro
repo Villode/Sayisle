@@ -1,0 +1,794 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import moments from '../content/moments/data.json';
+
+// 获取照片用于画廊
+const imageUrls = (moments?.items ?? [])
+  .flatMap((it) => it.images ?? [])
+  .filter(Boolean)
+  .slice(0, 12);
+
+const avatarSrc = (moments?.items ?? []).find((it) => it.avatar)?.avatar ?? 'https://v2.xxapi.cn/api/head?return=302';
+---
+
+<BaseLayout title="关于">
+  <div class="scroll-area about-page">
+    <!-- 大幅封面 - 电影感开篇 -->
+    <section class="hero-section">
+      <div class="hero-bg"></div>
+      <div class="hero-content">
+        <div class="avatar-circle">
+          <img src={avatarSrc} alt="头像" />
+        </div>
+        <h1 class="hero-title">言嶼</h1>
+        <p class="hero-quote">
+          " 生活不止眼前的苟且<br />
+          还有诗和远方的田野 "
+        </p>
+      </div>
+      <div class="scroll-hint">
+        <span>向下探索</span>
+        <i class="fas fa-chevron-down"></i>
+      </div>
+    </section>
+
+    <!-- 关于我 - 大段落文字 -->
+    <section class="story-section">
+      <div class="story-content">
+        <p class="story-text">
+          你好，我是言嶼。一个喜欢在日落时分散步，喜欢雨后的空气，
+          喜欢翻开一本旧书的气味的人。
+        </p>
+        <p class="story-text">
+          我用相机记录光影，用文字捕捉情绪，用心感受这个世界的温柔与美好。
+          生活中的每一个瞬间，都是值得被珍藏的诗篇。
+        </p>
+        <p class="story-text">
+          在这里，我分享我的所见所感，那些细碎的日常，那些突如其来的感动，
+          那些平凡生活中的小确幸。
+        </p>
+      </div>
+    </section>
+
+    <!-- 生活片段 - 照片拼贴 -->
+    {imageUrls.length > 0 && (
+      <section class="moments-gallery">
+        <h2 class="section-title">生活的片段</h2>
+        <div class="photo-collage">
+          {imageUrls.map((url, index) => (
+            <div class={`photo-item photo-${(index % 6) + 1}`}>
+              <img src={url} alt={`生活片段 ${index + 1}`} loading="lazy" />
+            </div>
+          ))}
+        </div>
+      </section>
+    )}
+
+    <!-- 喜欢的事物 -->
+    <section class="loves-section">
+      <h2 class="section-title">我喜欢的事物</h2>
+      <div class="loves-grid">
+        <div class="love-item">
+          <span class="love-emoji">☕</span>
+          <h3>咖啡时光</h3>
+          <p>一杯咖啡，一本书，一个慵懒的午后</p>
+        </div>
+        <div class="love-item">
+          <span class="love-emoji">🎵</span>
+          <h3>音乐随行</h3>
+          <p>耳机里的旋律，是生活的配乐</p>
+        </div>
+        <div class="love-item">
+          <span class="love-emoji">📷</span>
+          <h3>光影捕手</h3>
+          <p>用镜头定格美好，让时光慢下来</p>
+        </div>
+        <div class="love-item">
+          <span class="love-emoji">✈️</span>
+          <h3>远方的路</h3>
+          <p>世界很大，想去看看不一样的风景</p>
+        </div>
+        <div class="love-item">
+          <span class="love-emoji">🌙</span>
+          <h3>夜的宁静</h3>
+          <p>夜深人静时，最适合思考和创作</p>
+        </div>
+        <div class="love-item">
+          <span class="love-emoji">📚</span>
+          <h3>书香岁月</h3>
+          <p>在字里行间，遇见不同的灵魂</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 人生信条 -->
+    <section class="belief-section">
+      <div class="belief-content">
+        <blockquote class="belief-quote">
+          "要做一个温柔的人，<br />
+          永远对生活保持热爱，<br />
+          对未来充满期待。"
+        </blockquote>
+        <p class="belief-author">— 写给自己</p>
+      </div>
+    </section>
+
+    <!-- 联系方式 - 简约 -->
+    <section class="contact-section">
+      <h2 class="section-title">与我联系</h2>
+      <p class="contact-desc">如果你想和我交流，可以通过以下方式找到我</p>
+      <div class="contact-list">
+        <a href="mailto:your@email.com" class="contact-item">
+          <i class="fas fa-envelope"></i>
+          <span>your@email.com</span>
+        </a>
+        <a href="https://github.com/yourusername" class="contact-item" target="_blank">
+          <i class="fab fa-github"></i>
+          <span>GitHub</span>
+        </a>
+        <a href="https://twitter.com/yourusername" class="contact-item" target="_blank">
+          <i class="fab fa-twitter"></i>
+          <span>Twitter</span>
+        </a>
+      </div>
+    </section>
+
+    <!-- 结尾 -->
+    <footer class="page-footer">
+      <p>© 2024 · 言嶼 · 愿你我都能温柔地对待这个世界</p>
+    </footer>
+  </div>
+</BaseLayout>
+
+<style>
+/* ========== 关于页面 - 电影感 & 文艺风格 ========== */
+
+/* 隐藏侧边栏，全屏沉浸式体验 */
+:global(body:has(.about-page) .sidebar) {
+  display: none !important;
+}
+
+:global(body:has(.about-page) .content) {
+  grid-column: 2 / -1 !important;
+  max-width: 100% !important;
+}
+
+.about-page {
+  padding: 0 !important;
+  margin: 0 !important;
+  background: transparent;
+}
+
+/* ========== 英雄区 - 沉浸式开篇 ========== */
+.hero-section {
+  position: relative;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 80px 40px;
+  overflow: hidden;
+}
+
+.hero-bg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: radial-gradient(
+    ellipse at top,
+    rgba(66, 133, 244, 0.08) 0%,
+    transparent 60%
+  ),
+  radial-gradient(
+    ellipse at bottom,
+    rgba(66, 133, 244, 0.05) 0%,
+    transparent 60%
+  );
+  z-index: 0;
+}
+
+.hero-content {
+  position: relative;
+  z-index: 10;
+  text-align: center;
+  max-width: 700px;
+  animation: fadeInUp 1.2s ease-out;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.avatar-circle {
+  width: 120px;
+  height: 120px;
+  margin: 0 auto 32px;
+  border-radius: 50%;
+  overflow: hidden;
+  border: 3px solid rgba(66, 133, 244, 0.1);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+  transition: all 0.4s ease;
+}
+
+.avatar-circle:hover {
+  transform: scale(1.05) rotate(5deg);
+  box-shadow: 0 12px 48px rgba(66, 133, 244, 0.2);
+}
+
+.avatar-circle img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.hero-title {
+  font-size: clamp(48px, 8vw, 72px);
+  font-weight: 300;
+  color: var(--text-1);
+  margin: 0 0 32px;
+  letter-spacing: 8px;
+  font-family: 'Ma Shan Zheng', 'Zhi Mang Xing', cursive;
+  line-height: 1.2;
+}
+
+.hero-quote {
+  font-size: 20px;
+  line-height: 2;
+  color: var(--text-2);
+  font-style: italic;
+  opacity: 0.9;
+  font-weight: 300;
+  margin: 0;
+  letter-spacing: 2px;
+  white-space: normal;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+}
+
+.scroll-hint {
+  position: absolute;
+  bottom: 40px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  color: var(--text-2);
+  opacity: 0.6;
+  font-size: 13px;
+  letter-spacing: 1px;
+  animation: bounce 2s infinite;
+}
+
+@keyframes bounce {
+  0%, 20%, 50%, 80%, 100% {
+    transform: translateX(-50%) translateY(0);
+  }
+  40% {
+    transform: translateX(-50%) translateY(-10px);
+  }
+  60% {
+    transform: translateX(-50%) translateY(-5px);
+  }
+}
+
+.scroll-hint i {
+  font-size: 16px;
+}
+
+/* ========== 故事区 - 大段落文字 ========== */
+.story-section {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 120px 40px;
+}
+
+.story-content {
+  animation: fadeInUp 0.8s ease-out 0.2s both;
+}
+
+.story-text {
+  font-size: clamp(17px, 2vw, 20px);
+  line-height: 2.2;
+  color: var(--text-2);
+  margin: 0 0 40px;
+  font-weight: 300;
+  letter-spacing: 0.5px;
+  text-align: justify;
+  opacity: 0.95;
+}
+
+.story-text:last-child {
+  margin-bottom: 0;
+}
+
+/* ========== 通用标题 ========== */
+.section-title {
+  font-size: clamp(28px, 4vw, 36px);
+  font-weight: 300;
+  color: var(--text-1);
+  margin: 0 0 60px;
+  text-align: center;
+  letter-spacing: 4px;
+  opacity: 0.9;
+  font-family: 'Ma Shan Zheng', cursive;
+}
+
+/* ========== 照片画廊 - 水平作品集 ========== */
+.moments-gallery {
+  padding: 100px 0;
+  overflow: visible;
+}
+
+.moments-gallery .section-title {
+  padding: 0 40px;
+}
+
+.photo-collage {
+  display: flex;
+  gap: 24px;
+  margin-top: 40px;
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding: 20px 40px;
+  scroll-behavior: smooth;
+  scrollbar-width: thin;
+  scrollbar-color: var(--primary) transparent;
+}
+
+.photo-collage::-webkit-scrollbar {
+  height: 8px;
+}
+
+.photo-collage::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.photo-collage::-webkit-scrollbar-thumb {
+  background: var(--primary);
+  border-radius: 4px;
+  opacity: 0.5;
+}
+
+.photo-collage::-webkit-scrollbar-thumb:hover {
+  background: var(--primary);
+  opacity: 1;
+}
+
+.photo-item {
+  position: relative;
+  flex-shrink: 0;
+  width: 320px;
+  height: 420px;
+  overflow: hidden;
+  border-radius: 12px;
+  background: var(--card-soft);
+  transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  cursor: pointer;
+}
+
+.photo-item img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: all 0.5s ease;
+}
+
+.photo-item:hover {
+  transform: translateY(-12px);
+  box-shadow: 0 24px 64px rgba(0, 0, 0, 0.2);
+}
+
+.photo-item:hover img {
+  transform: scale(1.08);
+}
+
+/* 不同尺寸变化 */
+.photo-item.photo-1 { 
+  width: 280px;
+  height: 380px;
+}
+.photo-item.photo-3 { 
+  width: 360px;
+  height: 460px;
+}
+.photo-item.photo-5 { 
+  width: 300px;
+  height: 400px;
+}
+
+/* ========== 喜欢的事物 - 水平滚动 ========== */
+.loves-section {
+  padding: 100px 0;
+  overflow: visible;
+}
+
+.loves-section .section-title {
+  padding: 0 40px;
+}
+
+.loves-grid {
+  display: flex;
+  gap: 32px;
+  margin-top: 40px;
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding: 20px 40px;
+  scroll-behavior: smooth;
+  scrollbar-width: thin;
+  scrollbar-color: var(--primary) transparent;
+}
+
+.loves-grid::-webkit-scrollbar {
+  height: 8px;
+}
+
+.loves-grid::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.loves-grid::-webkit-scrollbar-thumb {
+  background: var(--primary);
+  border-radius: 4px;
+  opacity: 0.5;
+}
+
+.loves-grid::-webkit-scrollbar-thumb:hover {
+  background: var(--primary);
+  opacity: 1;
+}
+
+.love-item {
+  flex-shrink: 0;
+  width: 280px;
+  text-align: center;
+  padding: 40px 24px;
+  transition: all 0.3s ease;
+}
+
+.love-item:hover {
+  transform: translateY(-8px);
+}
+
+.love-emoji {
+  font-size: 56px;
+  display: block;
+  margin-bottom: 20px;
+  filter: grayscale(0.3);
+  transition: all 0.3s ease;
+}
+
+.love-item:hover .love-emoji {
+  filter: grayscale(0);
+  transform: scale(1.1) rotate(5deg);
+}
+
+.love-item h3 {
+  font-size: 20px;
+  font-weight: 500;
+  color: var(--text-1);
+  margin: 0 0 12px;
+  letter-spacing: 1px;
+}
+
+.love-item p {
+  font-size: 15px;
+  line-height: 1.8;
+  color: var(--text-2);
+  margin: 0;
+  opacity: 0.8;
+  font-weight: 300;
+}
+
+/* ========== 人生信条 ========== */
+.belief-section {
+  padding: 120px 40px;
+  max-width: 900px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.belief-content {
+  position: relative;
+  padding: 60px 40px;
+}
+
+.belief-quote {
+  font-size: clamp(22px, 3vw, 32px);
+  line-height: 2;
+  color: var(--text-1);
+  font-weight: 300;
+  font-style: italic;
+  margin: 0 0 24px;
+  letter-spacing: 2px;
+  opacity: 0.9;
+  position: relative;
+}
+
+.belief-quote::before,
+.belief-quote::after {
+  content: '"';
+  font-size: 1.5em;
+  color: var(--primary);
+  opacity: 0.3;
+}
+
+.belief-author {
+  font-size: 16px;
+  color: var(--text-2);
+  font-style: italic;
+  margin: 0;
+  opacity: 0.6;
+  letter-spacing: 1px;
+}
+
+/* ========== 联系方式 ========== */
+.contact-section {
+  padding: 100px 40px;
+  max-width: 800px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.contact-desc {
+  font-size: 16px;
+  color: var(--text-2);
+  margin: 0 0 40px;
+  opacity: 0.8;
+  font-weight: 300;
+  letter-spacing: 0.5px;
+}
+
+.contact-list {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 24px;
+}
+
+.contact-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 14px 28px;
+  color: var(--text-1);
+  text-decoration: none;
+  border-bottom: 2px solid transparent;
+  transition: all 0.3s ease;
+  font-size: 15px;
+  letter-spacing: 0.5px;
+}
+
+.contact-item:hover {
+  color: var(--primary);
+  border-bottom-color: var(--primary);
+  transform: translateY(-2px);
+}
+
+.contact-item i {
+  font-size: 18px;
+  opacity: 0.7;
+}
+
+/* ========== 页脚 ========== */
+.page-footer {
+  padding: 60px 40px;
+  text-align: center;
+  border-top: 1px solid rgba(0, 0, 0, 0.05);
+  margin-top: 60px;
+}
+
+.page-footer p {
+  font-size: 14px;
+  color: var(--text-2);
+  margin: 0;
+  opacity: 0.6;
+  font-weight: 300;
+  letter-spacing: 1px;
+}
+
+/* ========== 响应式设计 ========== */
+@media (max-width: 768px) {
+  .hero-section {
+    min-height: 80vh;
+    padding: 60px 24px;
+  }
+
+  .hero-content {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    gap: 0 !important;
+    max-width: 100% !important;
+  }
+
+  .avatar-circle {
+    width: 100px;
+    height: 100px;
+    margin-bottom: 24px;
+    flex-shrink: 0;
+  }
+
+  .hero-title {
+    letter-spacing: 4px;
+    margin: 0 !important;
+    padding: 0 20px;
+    flex-shrink: 0;
+  }
+
+  .hero-quote {
+    font-size: 20px !important;
+    letter-spacing: 1px;
+    line-height: 2.2;
+    padding: 0 20px;
+    width: 100% !important;
+    max-width: 100% !important;
+    margin: 32px 0 0 0 !important;
+    flex-shrink: 0;
+    box-sizing: border-box;
+  }
+
+  .story-section,
+  .belief-section,
+  .contact-section {
+    padding: 80px 24px;
+  }
+
+  .moments-gallery,
+  .loves-section {
+    padding: 80px 0;
+  }
+
+  .moments-gallery .section-title,
+  .loves-section .section-title {
+    padding: 0 24px;
+  }
+
+  .story-text {
+    margin-bottom: 32px;
+  }
+
+  .section-title {
+    margin-bottom: 40px;
+    letter-spacing: 2px;
+  }
+
+  .photo-collage,
+  .loves-grid {
+    padding: 20px 24px;
+    gap: 16px;
+  }
+
+  .photo-item {
+    width: 260px;
+    height: 340px;
+  }
+
+  .photo-item.photo-1 { 
+    width: 240px;
+    height: 320px;
+  }
+  .photo-item.photo-3 { 
+    width: 280px;
+    height: 360px;
+  }
+  .photo-item.photo-5 { 
+    width: 250px;
+    height: 330px;
+  }
+
+  .love-item {
+    width: 240px;
+    padding: 32px 20px;
+  }
+
+  .belief-content {
+    padding: 40px 24px;
+  }
+
+  .contact-list {
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+  }
+}
+
+@media (max-width: 480px) {
+  .hero-section {
+    min-height: 70vh;
+    padding: 40px 20px;
+  }
+
+  .hero-content {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    gap: 0 !important;
+    max-width: 100% !important;
+  }
+
+  .avatar-circle {
+    width: 80px;
+    height: 80px;
+    margin-bottom: 20px;
+    flex-shrink: 0;
+  }
+
+  .hero-title {
+    letter-spacing: 2px;
+    margin: 0 !important;
+    padding: 0 20px;
+    flex-shrink: 0;
+  }
+
+  .hero-quote {
+    font-size: 25px !important;
+    letter-spacing: 0.5px;
+    line-height: 2.4;
+    padding: 0 15px;
+    width: 100% !important;
+    max-width: 100% !important;
+    margin: 40px 0 0 0 !important;
+    flex-shrink: 0;
+    box-sizing: border-box;
+  }
+
+  .story-section,
+  .belief-section,
+  .contact-section {
+    padding: 60px 20px;
+  }
+
+  .moments-gallery,
+  .loves-section {
+    padding: 60px 0;
+  }
+
+  .moments-gallery .section-title,
+  .loves-section .section-title {
+    padding: 0 20px;
+  }
+
+  .photo-collage,
+  .loves-grid {
+    padding: 20px 20px;
+    gap: 12px;
+  }
+
+  .photo-item {
+    width: 220px;
+    height: 300px;
+  }
+
+  .photo-item.photo-1,
+  .photo-item.photo-3,
+  .photo-item.photo-5 { 
+    width: 220px;
+    height: 300px;
+  }
+
+  .love-item {
+    width: 220px;
+  }
+
+  .love-emoji {
+    font-size: 48px;
+  }
+
+  .page-footer {
+    padding: 40px 20px;
+  }
+}
+</style>

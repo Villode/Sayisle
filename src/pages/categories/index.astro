@@ -1,0 +1,102 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getCollection } from 'astro:content';
+
+const allPosts = await getCollection('blog');
+const allCategories = [...new Set(allPosts.flatMap(post => post.data.categories || []))];
+const categoryCounts = allCategories.map(category => ({
+  category,
+  count: allPosts.filter(post => post.data.categories?.includes(category)).length
+})).sort((a, b) => b.count - a.count);
+---
+
+<BaseLayout title="所有分类">
+  <div class="scroll-area">
+    <div class="list-header">
+      <div class="list-header-left">
+        <h1 class="list-title">所有分类</h1>
+        <p class="list-desc">共 {allCategories.length} 个分类</p>
+      </div>
+    </div>
+
+    <div class="categories-grid">
+      {categoryCounts.map(({ category, count }) => (
+        <a href={`/categories/${category}`} class="category-card">
+          <div class="category-icon">
+            <i class="fas fa-folder"></i>
+          </div>
+          <div class="category-info">
+            <h3 class="category-name">{category}</h3>
+            <p class="category-count">{count} 篇文章</p>
+          </div>
+        </a>
+      ))}
+    </div>
+  </div>
+</BaseLayout>
+
+<style>
+.categories-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 16px;
+  padding: 20px 0;
+}
+
+.category-card {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 20px;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  color: var(--text-1);
+  text-decoration: none;
+  transition: all 0.2s ease;
+}
+
+.category-card:hover {
+  background: var(--primary);
+  color: #fff;
+  border-color: var(--primary);
+  transform: translateY(-4px);
+  box-shadow: 0 8px 20px rgba(0, 47, 167, 0.2);
+}
+
+.category-icon {
+  width: 48px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 47, 167, 0.1);
+  border-radius: 12px;
+  font-size: 20px;
+  color: var(--primary);
+  transition: all 0.2s ease;
+}
+
+.category-card:hover .category-icon {
+  background: rgba(255, 255, 255, 0.2);
+  color: #fff;
+}
+
+.category-name {
+  font-size: 18px;
+  font-weight: 600;
+  margin: 0 0 4px 0;
+}
+
+.category-count {
+  font-size: 13px;
+  opacity: 0.7;
+  margin: 0;
+}
+
+@media (max-width: 767px) {
+  .categories-grid {
+    grid-template-columns: 1fr;
+  }
+}
+</style>

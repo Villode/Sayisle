@@ -1,0 +1,81 @@
+---
+import SEO from '../components/SEO.astro';
+
+interface Props {
+  title: string;
+  description?: string;
+  image?: string;
+  article?: boolean;
+}
+
+const { title, description, image, article = false } = Astro.props;
+
+// 获取当前路径用于导航高亮
+const currentPath = Astro.url.pathname;
+const isActive = (path: string) => {
+  if (path === '/') {
+    return currentPath === '/';
+  }
+  return currentPath.startsWith(path);
+};
+---
+
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <SEO 
+    title={title} 
+    description={description} 
+    image={image}
+    article={article}
+  />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Ma+Shan+Zheng&family=Zhi+Mang+Xing&display=swap" rel="stylesheet">
+</head>
+<body class="site">
+  <div class="container">
+    <!-- 侧边导航 -->
+    <nav class="sidenav">
+      <a href="/" class="sidenav-avatar">
+        <img src="https://v2.xxapi.cn/api/head?return=302" alt="头像">
+      </a>
+      <div class="sidenav-brand">言嶼</div>
+      <div class="sidenav-links">
+        <a href="/" class={isActive('/') ? 'active' : ''} title="首页"><i class="fas fa-home"></i></a>
+        <a href="/moments" class={isActive('/moments') ? 'active' : ''} title="动态"><i class="fas fa-rss"></i></a>
+        <a href="/links" class={isActive('/links') ? 'active' : ''} title="友链"><i class="fas fa-link"></i></a>
+        <a href="/about" class={isActive('/about') ? 'active' : ''} title="关于"><i class="fas fa-user"></i></a>
+      </div>
+      <button id="theme-toggle" class="theme-toggle" title="切换主题">
+        <i class="fas fa-moon"></i>
+      </button>
+    </nav>
+
+    <!-- 主内容区 -->
+    <main class="content">
+      <slot />
+    </main>
+
+    <!-- 右侧边栏 -->
+    <aside class="sidebar">
+      <slot name="sidebar" />
+    </aside>
+  </div>
+
+  <!-- 底部导航 -->
+  <nav class="mobile-nav">
+    <a href="/" class={`mobile-nav-item ${isActive('/') ? 'active' : ''}`}><i class="fas fa-home"></i><span>首页</span></a>
+    <a href="/moments" class={`mobile-nav-item ${isActive('/moments') ? 'active' : ''}`}><i class="fas fa-rss"></i><span>动态</span></a>
+    <a href="/links" class={`mobile-nav-item ${isActive('/links') ? 'active' : ''}`}><i class="fas fa-link"></i><span>友链</span></a>
+    <a href="/about" class={`mobile-nav-item ${isActive('/about') ? 'active' : ''}`}><i class="fas fa-user"></i><span>关于</span></a>
+  </nav>
+
+  <script is:inline src="/app.js"></script>
+</body>
+</html>
+
+<style is:global>
+  @import '../styles/global.css';
+</style>

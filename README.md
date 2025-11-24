@@ -1,43 +1,180 @@
-# Astro Starter Kit: Minimal
+# 言屿 · Sayisle
 
-```sh
-npm create astro@latest -- --template minimal
+> 语言的小岛，记录与分享的空间
+
+一个现代化的个人博客系统，使用 Astro 构建，具有完整的博客功能和优雅的设计。
+
+## ✨ 特性
+
+- 📝 **内容管理** - 基于 Astro Content Collections 的文章管理
+- 🎨 **精美设计** - 现代化的 UI 设计，支持深色模式
+- 📱 **完美适配** - 响应式设计，完美支持移动端
+- 🔍 **搜索功能** - 内置文章搜索
+- 🏷️ **标签分类** - 完整的标签和分类系统
+- 💬 **动态功能** - Moments 动态分享
+- 🚀 **高性能** - 基于 Astro 的静态生成
+- 🎯 **SEO 优化** - 完整的 SEO 和元数据支持
+- 📡 **RSS 订阅** - 支持 RSS 订阅
+- 🗺️ **站点地图** - 自动生成 Sitemap
+
+## 🚀 快速开始
+
+### 安装依赖
+
+```bash
+npm install
 ```
 
-> 🧑‍🚀 **Seasoned astronaut?** Delete this file. Have fun!
+### 开发模式
 
-## 🚀 Project Structure
+```bash
+npm run dev
+```
 
-Inside of your Astro project, you'll see the following folders and files:
+访问 http://localhost:4321
 
-```text
-/
-├── public/
+### 构建生产版本
+
+```bash
+npm run build
+```
+
+### 预览生产版本
+
+```bash
+npm run preview
+```
+
+## 📁 项目结构
+
+```
+Sayisle-Astro/
 ├── src/
-│   └── pages/
-│       └── index.astro
-└── package.json
+│   ├── layouts/          # 布局组件
+│   │   └── BaseLayout.astro
+│   ├── components/       # UI 组件
+│   │   ├── PostCard.astro
+│   │   ├── Sidebar.astro
+│   │   ├── Search.astro
+│   │   └── SEO.astro
+│   ├── pages/           # 页面路由
+│   │   ├── index.astro           # 首页
+│   │   ├── posts/               # 文章
+│   │   │   ├── index.astro      # 文章列表
+│   │   │   └── [...slug].astro  # 文章详情
+│   │   ├── tags/                # 标签
+│   │   │   ├── index.astro      # 标签列表
+│   │   │   └── [tag].astro      # 标签文章
+│   │   ├── categories/          # 分类
+│   │   ├── moments.astro        # 动态
+│   │   ├── about.astro          # 关于
+│   │   ├── 404.astro           # 404 页面
+│   │   └── rss.xml.js          # RSS 订阅
+│   ├── content/         # 内容数据
+│   │   ├── blog/        # 文章 Markdown
+│   │   ├── moments/     # 动态数据
+│   │   └── config.ts    # Content Collections 配置
+│   └── styles/
+│       └── global.css   # 全局样式
+└── public/
+    └── app.js          # 客户端脚本
 ```
 
-Astro looks for `.astro` or `.md` files in the `src/pages/` directory. Each page is exposed as a route based on its file name.
+## 📝 写作
 
-There's nothing special about `src/components/`, but that's where we like to put any Astro/React/Vue/Svelte/Preact components.
+### 创建文章
 
-Any static assets, like images, can be placed in the `public/` directory.
+在 `src/content/blog/` 目录下创建 `.md` 文件：
 
-## 🧞 Commands
+```markdown
+---
+title: "文章标题"
+date: 2024-11-22
+draft: false
+categories: ["技术"]
+tags: ["Astro", "博客"]
+cover: "https://example.com/image.jpg"
+summary: "文章摘要"
+---
 
-All commands are run from the root of the project, from a terminal:
+文章内容...
+```
 
-| Command                   | Action                                           |
-| :------------------------ | :----------------------------------------------- |
-| `npm install`             | Installs dependencies                            |
-| `npm run dev`             | Starts local dev server at `localhost:4321`      |
-| `npm run build`           | Build your production site to `./dist/`          |
-| `npm run preview`         | Preview your build locally, before deploying     |
-| `npm run astro ...`       | Run CLI commands like `astro add`, `astro check` |
-| `npm run astro -- --help` | Get help using the Astro CLI                     |
+### 发布动态
 
-## 👀 Want to learn more?
+编辑 `src/content/moments/data.json`：
 
-Feel free to check [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).
+```json
+{
+  "items": [
+    {
+      "author": "Cheng Du",
+      "time": "2024-11-22",
+      "text": "动态内容",
+      "images": ["https://example.com/image.jpg"]
+    }
+  ]
+}
+```
+
+## 🎨 自定义
+
+### 修改配置
+
+编辑 `astro.config.mjs` 修改站点配置：
+
+```js
+export default defineConfig({
+  site: 'https://your-domain.com',
+  // ...
+});
+```
+
+### 修改样式
+
+全局样式位于 `src/styles/global.css`
+
+### 修改布局
+
+编辑 `src/layouts/BaseLayout.astro` 自定义布局
+
+## 📦 部署
+
+### Vercel
+
+```bash
+npm run build
+```
+
+上传到 Vercel 即可自动部署
+
+### Netlify
+
+连接 Git 仓库，Netlify 会自动识别 Astro 项目
+
+### GitHub Pages
+
+```bash
+npm run build
+```
+
+将 `dist/` 目录部署到 GitHub Pages
+
+## 🛠️ 技术栈
+
+- **框架**: Astro 5.x
+- **样式**: CSS Variables + 自定义 CSS
+- **图标**: Font Awesome
+- **部署**: 静态站点生成
+
+## 📄 许可
+
+MIT License
+
+## 👤 作者
+
+Cheng Du
+
+---
+
+**言屿 · Sayisle** - 让文字找到它的岛屿 🏝️

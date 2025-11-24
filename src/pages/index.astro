@@ -1,16 +1,75 @@
 ---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PostCard from '../components/PostCard.astro';
+import Sidebar from '../components/Sidebar.astro';
+import { getCollection } from 'astro:content';
 
+const allPosts = await getCollection('blog', ({ data }) => !data.draft);
+const sortedPosts = allPosts.sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+const recentPosts = sortedPosts.slice(0, 10);
 ---
 
-<html lang="en">
-	<head>
-		<meta charset="utf-8" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<meta name="viewport" content="width=device-width" />
-		<meta name="generator" content={Astro.generator} />
-		<title>Astro</title>
-	</head>
-	<body>
-		<h1>Astro</h1>
-	</body>
-</html>
+<BaseLayout title="首页">
+  <div class="scroll-area">
+    <!-- Hero区域 -->
+    <div class="hero">
+      <button class="theme-toggle" id="theme-toggle" aria-label="切换主题">
+        <svg class="sun-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="5"></circle>
+          <line x1="12" y1="1" x2="12" y2="3"></line>
+          <line x1="12" y1="21" x2="12" y2="23"></line>
+          <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+          <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+          <line x1="1" y1="12" x2="3" y2="12"></line>
+          <line x1="21" y1="12" x2="23" y2="12"></line>
+          <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+          <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+        </svg>
+
+        <svg class="moon-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+        </svg>
+      </button>
+      
+      <div class="hero-background">
+        <div class="hero-pattern"></div>
+        <div class="hero-gradient"></div>
+      </div>
+      
+      <div class="hero-content-wrapper">
+        <div class="hero-avatar">
+          <img src="https://v2.xxapi.cn/api/head?return=302" alt="头像">
+        </div>
+        
+        <div class="hero-text-content">
+          <div class="hero-main-info">
+            <h1 class="hero-title">
+              <span class="title-main">言屿</span>
+              <span class="title-sub">Sayisle</span>
+            </h1>
+            
+            <div class="hero-description">
+              <p class="hero-quote">「文字是心灵的岛屿，每一座都承载着独特的风景」</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 文章列表 -->
+    <div class="posts">
+      {recentPosts.map(post => (
+        <PostCard
+          title={post.data.title}
+          date={post.data.date}
+          summary={post.data.summary}
+          cover={post.data.cover}
+          tags={post.data.tags}
+          slug={post.slug}
+        />
+      ))}
+    </div>
+  </div>
+
+  <Sidebar slot="sidebar" />
+</BaseLayout>

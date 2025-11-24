@@ -1,0 +1,490 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Sidebar from '../components/Sidebar.astro';
+
+const links = [
+  {
+    name: '清风徐来',
+    url: 'https://example.com',
+    avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=1',
+    desc: '山水之间，诗酒趁年华'
+  },
+  {
+    name: '星河入梦',
+    url: 'https://example.com',
+    avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=2',
+    desc: '追寻生活中的点点星光'
+  },
+  {
+    name: '时光书简',
+    url: 'https://example.com',
+    avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=3',
+    desc: '用文字记录岁月的温柔'
+  },
+  {
+    name: '云水禅心',
+    url: 'https://example.com',
+    avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=4',
+    desc: '在喧嚣中寻找内心的宁静'
+  },
+  {
+    name: '月下独酌',
+    url: 'https://example.com',
+    avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=5',
+    desc: '品味孤独中的诗意与自由'
+  },
+  {
+    name: '墨痕书香',
+    url: 'https://example.com',
+    avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=6',
+    desc: '在书页间流连，于墨香中沉醉'
+  },
+  {
+    name: '繁星点点',
+    url: 'https://example.com',
+    avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=7',
+    desc: '探索未知的宇宙奥秘'
+  },
+  {
+    name: '晨曦微光',
+    url: 'https://example.com',
+    avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=8',
+    desc: '黎明前的那一抹温柔'
+  },
+  {
+    name: '落日余晖',
+    url: 'https://example.com',
+    avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=9',
+    desc: '记录生命中的美好瞬间'
+  },
+  {
+    name: '竹林听雨',
+    url: 'https://example.com',
+    avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=10',
+    desc: '在自然中寻找内心的平静'
+  },
+  {
+    name: '琴瑟和鸣',
+    url: 'https://example.com',
+    avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=11',
+    desc: '音律中流淌的情感与思绪'
+  },
+  {
+    name: '烟雨江南',
+    url: 'https://example.com',
+    avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=12',
+    desc: '诗意栖居在水墨丹青里'
+  },
+];
+---
+
+<BaseLayout title="友情链接">
+  <div class="scroll-area">
+    <div class="links-container">
+      <div class="links-header">
+        <h1 class="links-title">我和我的小伙伴们</h1>
+        <div class="links-actions">
+          <button class="action-btn">🎲 随机访问</button>
+          <button class="action-btn">📝 申请友链</button>
+        </div>
+      </div>
+
+      <div class="links-scroll-container">
+        <div class="links-row">
+          <div class="links-scroll-content scroll-right">
+            {links.slice(0, 6).map((link) => (
+              <a href={link.url} target="_blank" rel="noopener noreferrer" class="link-avatar-item" title={link.desc}>
+                <img src={link.avatar} alt={link.name} />
+                <div class="avatar-ring"></div>
+              </a>
+            ))}
+            {links.slice(0, 6).map((link) => (
+              <a href={link.url} target="_blank" rel="noopener noreferrer" class="link-avatar-item" title={link.desc}>
+                <img src={link.avatar} alt={link.name} />
+                <div class="avatar-ring"></div>
+              </a>
+            ))}
+          </div>
+        </div>
+        
+        <div class="links-row">
+          <div class="links-scroll-content scroll-left">
+            {links.slice(6, 12).map((link) => (
+              <a href={link.url} target="_blank" rel="noopener noreferrer" class="link-avatar-item" title={link.desc}>
+                <img src={link.avatar} alt={link.name} />
+                <div class="avatar-ring"></div>
+              </a>
+            ))}
+            {links.slice(6, 12).map((link) => (
+              <a href={link.url} target="_blank" rel="noopener noreferrer" class="link-avatar-item" title={link.desc}>
+                <img src={link.avatar} alt={link.name} />
+                <div class="avatar-ring"></div>
+              </a>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      <div class="links-grid-section">
+        <h2 class="grid-title">友链 ({links.length})</h2>
+        <div class="links-grid">
+          {links.map((link) => (
+            <a href={link.url} target="_blank" rel="noopener noreferrer" class="link-grid-card">
+              <div class="card-avatar">
+                <img src={link.avatar} alt={link.name} />
+              </div>
+              <div class="card-content">
+                <h3 class="card-name">{link.name}</h3>
+                <p class="card-desc">{link.desc}</p>
+              </div>
+            </a>
+          ))}
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <Sidebar slot="sidebar" />
+</BaseLayout>
+
+<style>
+.links-container {
+  max-width: 100%;
+  margin: 0 auto;
+  padding: 40px 20px;
+}
+
+/* 头部 */
+.links-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 32px;
+  padding: 0 8px;
+}
+
+.links-title {
+  font-size: 24px;
+  font-weight: 500;
+  color: var(--text-1);
+  margin: 0;
+  letter-spacing: 1px;
+}
+
+.links-actions {
+  display: flex;
+  gap: 12px;
+}
+
+.action-btn {
+  padding: 8px 16px;
+  border-radius: 8px;
+  font-size: 13px;
+  color: var(--text-1);
+  cursor: pointer;
+  transition: all 0.3s ease;
+  white-space: nowrap;
+  flex-shrink: 0;
+  background: transparent;
+  border: none;
+}
+
+.action-btn:hover {
+  background: var(--primary);
+  color: #fff;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(66, 133, 244, 0.3);
+}
+
+/* 滚动容器 */
+.links-scroll-container {
+  position: relative;
+  width: 100%;
+  overflow-x: hidden;
+  overflow-y: visible;
+  border-radius: 16px;
+  padding: 32px 0;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.links-row {
+  width: 100%;
+  overflow: visible;
+  position: relative;
+}
+
+.links-scroll-content {
+  display: flex;
+  gap: 24px;
+  width: max-content;
+  padding: 0 20px;
+  overflow: visible;
+}
+
+.scroll-right {
+  animation: scrollRight 30s linear infinite;
+}
+
+.scroll-left {
+  animation: scrollLeft 30s linear infinite;
+}
+
+.links-scroll-content:hover {
+  animation-play-state: paused;
+}
+
+@keyframes scrollRight {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+@keyframes scrollLeft {
+  0% {
+    transform: translateX(-50%);
+  }
+  100% {
+    transform: translateX(0);
+  }
+}
+
+/* 头像项 */
+.link-avatar-item {
+  position: relative;
+  flex-shrink: 0;
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  overflow: visible;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border: 3px solid var(--border);
+  z-index: 1;
+}
+
+.link-avatar-item:hover {
+  transform: scale(1.1);
+  border-color: var(--primary);
+  box-shadow: 0 8px 20px rgba(66, 133, 244, 0.3);
+  z-index: 100;
+}
+
+.link-avatar-item > img {
+  border-radius: 50%;
+}
+
+.link-avatar-item img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+}
+
+.link-avatar-item:hover img {
+  transform: scale(1.05);
+}
+
+.avatar-ring {
+  position: absolute;
+  inset: -3px;
+  border-radius: 50%;
+  border: 2px solid var(--primary);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+}
+
+.link-avatar-item:hover .avatar-ring {
+  opacity: 1;
+  animation: pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.1);
+    opacity: 0.5;
+  }
+}
+
+/* 网格卡片区域 */
+.links-grid-section {
+  margin-top: 48px;
+  padding: 0 8px;
+}
+
+.grid-title {
+  font-size: 20px;
+  font-weight: 500;
+  color: var(--text-1);
+  margin: 0 0 24px 0;
+  letter-spacing: 1px;
+}
+
+.links-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 16px;
+}
+
+.link-grid-card {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 16px;
+  border-radius: 12px;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.link-grid-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+}
+
+.card-avatar {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  overflow: hidden;
+  flex-shrink: 0;
+  border: 2px solid var(--border);
+  transition: border-color 0.3s ease;
+}
+
+.link-grid-card:hover .card-avatar {
+  border-color: var(--primary);
+}
+
+.card-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.card-content {
+  flex: 1;
+  min-width: 0;
+}
+
+.card-name {
+  font-size: 15px;
+  font-weight: 500;
+  color: var(--text-1);
+  margin: 0 0 6px 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  transition: color 0.3s ease;
+}
+
+.link-grid-card:hover .card-name {
+  color: var(--primary);
+}
+
+.card-desc {
+  font-size: 12px;
+  color: var(--text-2);
+  line-height: 1.5;
+  margin: 0;
+  opacity: 0.75;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* 响应式 */
+@media (max-width: 767px) {
+  .links-container {
+    padding: 24px 16px;
+  }
+
+  .links-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 16px;
+    padding: 0;
+  }
+
+  .links-title {
+    font-size: 20px;
+  }
+
+  .links-actions {
+    width: 100%;
+  }
+
+  .action-btn {
+    flex: 1;
+    padding: 10px 16px;
+  }
+
+  .links-scroll-container {
+    padding: 16px 0;
+    gap: 16px;
+  }
+
+  .link-avatar-item {
+    width: 64px;
+    height: 64px;
+    border-width: 2px;
+  }
+
+  .links-scroll-content {
+    gap: 16px;
+    padding: 0 16px;
+  }
+  
+  .scroll-right {
+    animation: scrollRight 20s linear infinite;
+  }
+
+  .scroll-left {
+    animation: scrollLeft 20s linear infinite;
+  }
+
+  .links-grid-section {
+    margin-top: 32px;
+    padding: 0;
+  }
+
+  .grid-title {
+    font-size: 18px;
+    margin-bottom: 20px;
+  }
+
+  .links-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+  }
+
+  .link-grid-card {
+    padding: 12px;
+    gap: 8px;
+    min-width: 0;
+  }
+
+  .card-avatar {
+    width: 42px;
+    height: 42px;
+  }
+
+  .card-name {
+    font-size: 14px;
+  }
+
+  .card-desc {
+    font-size: 12px;
+  }
+}
+</style>
